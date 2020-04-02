@@ -4,6 +4,7 @@ import co.aikar.commands.PaperCommandManager;
 import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.llewkcor.ares.essentials.command.*;
+import com.llewkcor.ares.essentials.support.SupportManager;
 import com.llewkcor.ares.essentials.vanish.VanishManager;
 import com.llewkcor.ares.essentials.warp.WarpManager;
 import lombok.Getter;
@@ -20,6 +21,7 @@ public final class Essentials extends JavaPlugin {
     @Getter protected PaperCommandManager commandManager;
     @Getter protected WarpManager warpManager;
     @Getter protected VanishManager vanishManager;
+    @Getter protected SupportManager supportManager;
 
     @Override
     public void onEnable() {
@@ -28,6 +30,7 @@ public final class Essentials extends JavaPlugin {
         this.commandManager = new PaperCommandManager(this);
         this.warpManager = new WarpManager(this);
         this.vanishManager = new VanishManager(this);
+        this.supportManager = new SupportManager(this);
 
         commandManager.enableUnstableAPI("help");
 
@@ -39,6 +42,7 @@ public final class Essentials extends JavaPlugin {
         commandManager.registerCommand(new ModerationCommand(this));
         commandManager.registerCommand(new MiscCommand(this));
         commandManager.registerCommand(new InfoCommand(this));
+        commandManager.registerCommand(new SupportCommand(this));
 
         warpManager.getHandler().load();
     }
