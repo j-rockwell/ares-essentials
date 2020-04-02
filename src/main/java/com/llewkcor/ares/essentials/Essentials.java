@@ -27,6 +27,7 @@ public final class Essentials extends JavaPlugin {
         commandManager.registerCommand(new ChatCommand(this));
         commandManager.registerCommand(new WarpCommand(this));
         commandManager.registerCommand(new TeleportCommand(this));
+        commandManager.registerCommand(new ModerationCommand(this));
 
         warpManager.getHandler().load();
     }
