@@ -5,6 +5,7 @@ import com.comphenix.protocol.ProtocolLibrary;
 import com.comphenix.protocol.ProtocolManager;
 import com.llewkcor.ares.core.Ares;
 import com.llewkcor.ares.essentials.command.*;
+import com.llewkcor.ares.essentials.message.MessageManager;
 import com.llewkcor.ares.essentials.punishment.PunishmentManager;
 import com.llewkcor.ares.essentials.support.SupportManager;
 import com.llewkcor.ares.essentials.vanish.VanishManager;
@@ -27,6 +28,7 @@ public final class Essentials extends JavaPlugin {
     @Getter protected VanishManager vanishManager;
     @Getter protected SupportManager supportManager;
     @Getter protected PunishmentManager punishmentManager;
+    @Getter protected MessageManager messageManager;
 
     @Override
     public void onEnable() {
@@ -38,6 +40,7 @@ public final class Essentials extends JavaPlugin {
         this.vanishManager = new VanishManager(this);
         this.supportManager = new SupportManager(this);
         this.punishmentManager = new PunishmentManager(this);
+        this.messageManager = new MessageManager(this);
 
         commandManager.enableUnstableAPI("help");
 
@@ -51,6 +54,7 @@ public final class Essentials extends JavaPlugin {
         commandManager.registerCommand(new InfoCommand(this));
         commandManager.registerCommand(new SupportCommand(this));
         commandManager.registerCommand(new PunishmentCommand(this));
+        commandManager.registerCommand(new MessageCommand(this));
 
         warpManager.getHandler().load();
     }
