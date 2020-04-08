@@ -8,6 +8,7 @@ import com.llewkcor.ares.essentials.broadcast.BroadcastManager;
 import com.llewkcor.ares.essentials.command.*;
 import com.llewkcor.ares.essentials.message.MessageManager;
 import com.llewkcor.ares.essentials.punishment.PunishmentManager;
+import com.llewkcor.ares.essentials.reboot.RebootManager;
 import com.llewkcor.ares.essentials.support.SupportManager;
 import com.llewkcor.ares.essentials.vanish.VanishManager;
 import com.llewkcor.ares.essentials.warp.WarpManager;
@@ -31,6 +32,7 @@ public final class Essentials extends JavaPlugin {
     @Getter protected PunishmentManager punishmentManager;
     @Getter protected MessageManager messageManager;
     @Getter protected BroadcastManager broadcastManager;
+    @Getter protected RebootManager rebootManager;
 
     @Override
     public void onEnable() {
@@ -44,9 +46,11 @@ public final class Essentials extends JavaPlugin {
         this.punishmentManager = new PunishmentManager(this);
         this.messageManager = new MessageManager(this);
         this.broadcastManager = new BroadcastManager(this);
+        this.rebootManager = new RebootManager(this);
 
         commandManager.enableUnstableAPI("help");
 
+        commandManager.registerCommand(new RebootCommand(this));
         commandManager.registerCommand(new ItemCommand(this));
         commandManager.registerCommand(new PlayerCommand(this));
         commandManager.registerCommand(new ChatCommand(this));

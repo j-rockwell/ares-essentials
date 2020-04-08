@@ -1,0 +1,3 @@
+server_restart:
+  default_reboot_time: 300
+  server_lifespan: 43200
