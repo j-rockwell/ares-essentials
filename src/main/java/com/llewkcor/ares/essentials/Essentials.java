@@ -6,6 +6,7 @@ import com.comphenix.protocol.ProtocolManager;
 import com.llewkcor.ares.core.Ares;
 import com.llewkcor.ares.essentials.broadcast.BroadcastManager;
 import com.llewkcor.ares.essentials.command.*;
+import com.llewkcor.ares.essentials.listener.CoreHookListener;
 import com.llewkcor.ares.essentials.message.MessageManager;
 import com.llewkcor.ares.essentials.punishment.PunishmentManager;
 import com.llewkcor.ares.essentials.reboot.RebootManager;
@@ -48,8 +49,8 @@ public final class Essentials extends JavaPlugin {
         this.broadcastManager = new BroadcastManager(this);
         this.rebootManager = new RebootManager(this);
 
+        // Commands
         commandManager.enableUnstableAPI("help");
-
         commandManager.registerCommand(new RebootCommand(this));
         commandManager.registerCommand(new ItemCommand(this));
         commandManager.registerCommand(new PlayerCommand(this));
@@ -63,6 +64,9 @@ public final class Essentials extends JavaPlugin {
         commandManager.registerCommand(new PunishmentCommand(this));
         commandManager.registerCommand(new MessageCommand(this));
         commandManager.registerCommand(new IgnoreCommand(this));
+
+        // Listeners
+        Bukkit.getPluginManager().registerEvents(new CoreHookListener(this), this);
 
         warpManager.getHandler().load();
     }
