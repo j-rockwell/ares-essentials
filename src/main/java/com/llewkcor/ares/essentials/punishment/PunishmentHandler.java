@@ -19,6 +19,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -338,6 +339,11 @@ public final class PunishmentHandler {
 
                 final Punishment punishment = new Punishment(PunishmentType.BAN, aresAccount.getBukkitId(), creatorId, aresAccount.getAddress(), reason);
                 final Player kicked = Bukkit.getPlayer(aresAccount.getBukkitId());
+                final List<Player> matched = manager.getMatchingPlayers(kicked);
+
+                if (!matched.isEmpty()) {
+                    matched.forEach(matchedPlayer -> kicked.kickPlayer(manager.getKickMessage(punishment)));
+                }
 
                 kicked.kickPlayer(manager.getKickMessage(punishment));
 
@@ -385,6 +391,11 @@ public final class PunishmentHandler {
 
                 final Punishment punishment = new Punishment(PunishmentType.BAN, aresAccount.getBukkitId(), creatorId, aresAccount.getAddress(), reason, (Time.now() + duration));
                 final Player kicked = Bukkit.getPlayer(aresAccount.getBukkitId());
+                final List<Player> matched = manager.getMatchingPlayers(kicked);
+
+                if (!matched.isEmpty()) {
+                    matched.forEach(matchedPlayer -> kicked.kickPlayer(manager.getKickMessage(punishment)));
+                }
 
                 kicked.kickPlayer(manager.getKickMessage(punishment));
 
@@ -423,6 +434,11 @@ public final class PunishmentHandler {
 
                 final Punishment punishment = new Punishment(PunishmentType.BLACKLIST, aresAccount.getBukkitId(), creatorId, aresAccount.getAddress(), reason);
                 final Player kicked = Bukkit.getPlayer(aresAccount.getBukkitId());
+                final List<Player> matched = manager.getMatchingPlayers(kicked);
+
+                if (!matched.isEmpty()) {
+                    matched.forEach(matchedPlayer -> kicked.kickPlayer(manager.getKickMessage(punishment)));
+                }
 
                 kicked.kickPlayer(manager.getKickMessage(punishment));
 

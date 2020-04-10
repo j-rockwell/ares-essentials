@@ -3,6 +3,7 @@ package com.llewkcor.ares.essentials.punishment;
 import com.google.common.base.Joiner;
 import com.google.common.collect.ImmutableCollection;
 import com.google.common.collect.Lists;
+import com.llewkcor.ares.commons.util.general.IPS;
 import com.llewkcor.ares.commons.util.general.Time;
 import com.llewkcor.ares.essentials.Essentials;
 import com.llewkcor.ares.essentials.punishment.data.Punishment;
@@ -13,9 +14,11 @@ import com.mongodb.client.model.Filters;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 public final class PunishmentManager {
     @Getter public final Essentials plugin;
@@ -63,7 +66,7 @@ public final class PunishmentManager {
         }
 
         // TODO: Update to website domain
-        result.add(ChatColor.RED + "Appeal at https://gofuckyour.self");
+        result.add(ChatColor.RED + "Appeal at https://playares.com/appeal");
         return Joiner.on(ChatColor.RESET + "\n").join(result);
     }
 
@@ -83,8 +86,18 @@ public final class PunishmentManager {
             result.add(ChatColor.RED + "This punishment will expire in " + Time.convertToRemaining(punishment.getExpireDate() - Time.now()));
         }
 
-        // TODO: Update to website domain
-        result.add(ChatColor.RED + "Appeal at https://gofuckyour.self");
+        result.add(ChatColor.RED + "Appeal at https://playares.com/appeal");
         return Joiner.on(ChatColor.RESET + "\n").join(result);
+    }
+
+    /**
+     * Returns a List of players that have the same IP address as the provided player
+     * @param player Player
+     * @return List of Players
+     */
+    public List<Player> getMatchingPlayers(Player player) {
+        final long address = IPS.toLong(player.getAddress().getAddress().getHostAddress());
+        return Bukkit.getOnlinePlayers().stream().filter(otherPlayer -> !otherPlayer.getUniqueId().equals(player.getUniqueId()) &&
+                IPS.toLong(otherPlayer.getAddress().getAddress().getHostAddress()) == address).collect(Collectors.toList());
     }
 }
