@@ -136,9 +136,17 @@ public final class ItemCommand extends BaseCommand {
     @CommandPermission("essentials.item")
     @Description("Give yourself an item")
     @Syntax("<item name> [amount]")
-    public void onItem(Player player, String itemName, @Optional int amount) {
+    public void onItem(Player player, String itemName, @Optional String amountName) {
+        int amount = 1;
         final Material material = Material.getMaterial(itemName.toUpperCase());
         short data = 0;
+
+        try {
+            amount = Integer.parseInt(amountName);
+        } catch (NumberFormatException ex) {
+            player.sendMessage(ChatColor.RED + "Invalid amount");
+            return;
+        }
 
         if (player.getInventory().firstEmpty() == -1) {
             player.sendMessage(ChatColor.RED + "Your inventory is full");
