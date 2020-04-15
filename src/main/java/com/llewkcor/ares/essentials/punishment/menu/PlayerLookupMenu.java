@@ -65,7 +65,7 @@ public final class PlayerLookupMenu extends Menu {
 
         addItem(new ClickableItem(webProfileIcon, 0, click -> {
             player.closeInventory();
-            player.sendMessage(ChatColor.DARK_GREEN + observed.getUsername() + "'s Profile Link" + ChatColor.GREEN + ": https://gofuckyour.self/u/" + observed.getUniqueId().toString());
+            player.sendMessage(ChatColor.DARK_GREEN + observed.getUsername() + "'s Profile Link" + ChatColor.GREEN + ": https://playares.com/user/" + observed.getUniqueId().toString());
         }));
 
         addItem(new ClickableItem(accountHistoryIcon, 2, click -> {
