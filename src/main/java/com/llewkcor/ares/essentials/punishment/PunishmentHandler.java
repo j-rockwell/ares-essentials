@@ -345,7 +345,9 @@ public final class PunishmentHandler {
                     matched.forEach(matchedPlayer -> kicked.kickPlayer(manager.getKickMessage(punishment)));
                 }
 
-                kicked.kickPlayer(manager.getKickMessage(punishment));
+                if (kicked != null) {
+                    kicked.kickPlayer(manager.getKickMessage(punishment));
+                }
 
                 new Scheduler(manager.getPlugin()).async(() -> PunishmentDAO.savePunishment(manager.getPlugin().getCore().getDatabaseInstance(), punishment)).run();
 
@@ -397,7 +399,9 @@ public final class PunishmentHandler {
                     matched.forEach(matchedPlayer -> kicked.kickPlayer(manager.getKickMessage(punishment)));
                 }
 
-                kicked.kickPlayer(manager.getKickMessage(punishment));
+                if (kicked != null) {
+                    kicked.kickPlayer(manager.getKickMessage(punishment));
+                }
 
                 new Scheduler(manager.getPlugin()).async(() -> PunishmentDAO.savePunishment(manager.getPlugin().getCore().getDatabaseInstance(), punishment)).run();
 
@@ -440,7 +444,9 @@ public final class PunishmentHandler {
                     matched.forEach(matchedPlayer -> kicked.kickPlayer(manager.getKickMessage(punishment)));
                 }
 
-                kicked.kickPlayer(manager.getKickMessage(punishment));
+                if (kicked != null) {
+                    kicked.kickPlayer(manager.getKickMessage(punishment));
+                }
 
                 new Scheduler(manager.getPlugin()).async(() -> PunishmentDAO.savePunishment(manager.getPlugin().getCore().getDatabaseInstance(), punishment)).run();
 
