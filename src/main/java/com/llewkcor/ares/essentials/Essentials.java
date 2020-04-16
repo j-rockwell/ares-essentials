@@ -10,6 +10,7 @@ import com.llewkcor.ares.essentials.listener.CoreHookListener;
 import com.llewkcor.ares.essentials.message.MessageManager;
 import com.llewkcor.ares.essentials.punishment.PunishmentManager;
 import com.llewkcor.ares.essentials.reboot.RebootManager;
+import com.llewkcor.ares.essentials.staff.StaffManager;
 import com.llewkcor.ares.essentials.support.SupportManager;
 import com.llewkcor.ares.essentials.vanish.VanishManager;
 import com.llewkcor.ares.essentials.vote.VoteManager;
@@ -36,6 +37,7 @@ public final class Essentials extends JavaPlugin {
     @Getter protected BroadcastManager broadcastManager;
     @Getter protected RebootManager rebootManager;
     @Getter protected VoteManager voteManager;
+    @Getter protected StaffManager staffManager;
 
     @Override
     public void onEnable() {
@@ -51,6 +53,7 @@ public final class Essentials extends JavaPlugin {
         this.broadcastManager = new BroadcastManager(this);
         this.rebootManager = new RebootManager(this);
         this.voteManager = new VoteManager(this);
+        this.staffManager = new StaffManager(this);
 
         // Commands
         commandManager.enableUnstableAPI("help");
@@ -67,6 +70,7 @@ public final class Essentials extends JavaPlugin {
         commandManager.registerCommand(new PunishmentCommand(this));
         commandManager.registerCommand(new MessageCommand(this));
         commandManager.registerCommand(new IgnoreCommand(this));
+        commandManager.registerCommand(new StaffCommand(this));
 
         // Listeners
         Bukkit.getPluginManager().registerEvents(new CoreHookListener(this), this);
