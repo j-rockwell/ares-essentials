@@ -7,6 +7,7 @@ import com.llewkcor.ares.core.alts.data.AltEntry;
 import com.llewkcor.ares.essentials.punishment.PunishmentManager;
 import com.llewkcor.ares.essentials.punishment.data.Punishment;
 import com.llewkcor.ares.essentials.punishment.data.PunishmentType;
+import com.llewkcor.ares.essentials.staff.data.StaffAccount;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -44,8 +45,12 @@ public final class PunishmentListener implements Listener {
         }
 
         if (altEntries.size() > 1) {
-            new Scheduler(manager.getPlugin()).sync(() -> Bukkit.getOnlinePlayers().stream().filter(player -> player.hasPermission("eessentials.punishment.lookup")).forEach(staff -> {
-                staff.sendMessage(ChatColor.RED + "[Alt Detected] " + ChatColor.DARK_PURPLE + event.getName() + ChatColor.GRAY + " has " + ChatColor.LIGHT_PURPLE + altEntries.size() + ChatColor.GRAY + " connected accounts. Type " + ChatColor.AQUA + "/lookup " + event.getName() + ChatColor.GRAY + " to view");
+            new Scheduler(manager.getPlugin()).sync(() -> manager.getPlugin().getStaffManager().getAccountByPermission(StaffAccount.StaffSetting.SHOW_ALT_NOTIFICATIONS, true).forEach(staffAccount -> {
+                final Player staff = Bukkit.getPlayer(staffAccount.getUniqueId());
+
+                if (staff != null && staff.isOnline()) {
+                    staff.sendMessage(ChatColor.RED + "[Alt Detected] " + ChatColor.DARK_PURPLE + event.getName() + ChatColor.GRAY + " has " + ChatColor.LIGHT_PURPLE + altEntries.size() + ChatColor.GRAY + " connected accounts. Type " + ChatColor.AQUA + "/lookup " + event.getName() + ChatColor.GRAY + " to view");
+                }
             })).run();
         }
     }

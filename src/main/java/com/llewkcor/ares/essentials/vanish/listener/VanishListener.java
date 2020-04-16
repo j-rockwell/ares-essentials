@@ -7,6 +7,7 @@ import com.comphenix.protocol.events.PacketContainer;
 import com.comphenix.protocol.events.PacketEvent;
 import com.comphenix.protocol.wrappers.EnumWrappers;
 import com.google.common.collect.Lists;
+import com.llewkcor.ares.essentials.staff.data.StaffAccount;
 import com.llewkcor.ares.essentials.vanish.VanishManager;
 import com.llewkcor.ares.essentials.vanish.menu.ChestMenu;
 import org.bukkit.Bukkit;
@@ -200,13 +201,18 @@ public final class VanishListener implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
-        final boolean hasPermission = player.hasPermission("essentials.vanish");
 
-        if (hasPermission) {
-            return;
+        // Player can't vanish, hide all players that are vanished from them
+        if (!player.hasPermission("essentials.vanish")) {
+            manager.getHandler().hideExisting(player);
         }
 
-        manager.getHandler().hideExisting(player);
+        // Player has a staff account and has toggle vanish on join enabled
+        final StaffAccount staffAccount = manager.getPlugin().getStaffManager().getAccountByID(player.getUniqueId());
+
+        if (staffAccount != null && staffAccount.isEnabled(StaffAccount.StaffSetting.JOIN_VANISHED)) {
+            manager.getHandler().hidePlayer(player);
+        }
     }
 
     @EventHandler

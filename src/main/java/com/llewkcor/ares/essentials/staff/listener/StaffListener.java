@@ -1,14 +1,17 @@
 package com.llewkcor.ares.essentials.staff.listener;
 
 import com.llewkcor.ares.commons.event.PlayerBigMoveEvent;
+import com.llewkcor.ares.commons.event.ProcessedChatEvent;
 import com.llewkcor.ares.essentials.staff.StaffManager;
 import com.llewkcor.ares.essentials.staff.data.StaffAccount;
 import com.llewkcor.ares.essentials.staff.data.StaffDAO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -36,26 +39,33 @@ public final class StaffListener implements Listener {
     public void onJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
 
-        if (!player.hasPermission("essentials.staff")) {
-            return;
-        }
+        // Send connect notification to staff
+        manager.getAccountByPermission(StaffAccount.StaffSetting.SHOW_CONNECTION_NOTIFICATIONS, true).forEach(staffAccount -> {
+            final Player staff = Bukkit.getPlayer(staffAccount.getUniqueId());
 
-        StaffAccount account = manager.getAccountByID(player.getUniqueId());
+            if (staff != null && staff.isOnline()) {
+                staff.sendMessage(ChatColor.GRAY + player.getName() + " connected " + ChatColor.WHITE + "(" + ChatColor.AQUA + Bukkit.getOnlinePlayers().size() + " online" + ChatColor.WHITE + ")");
+            }
+        });
 
-        // The player has the staff rank but hasn't logged in yet
-        if (account == null) {
-            account = new StaffAccount(player.getUniqueId());
+        if (player.hasPermission("essentials.staff")) {
+            StaffAccount account = manager.getAccountByID(player.getUniqueId());
 
-            manager.getStaffRepository().add(account);
-            manager.getHandler().saveAccount(player, account);
+            // The player has the staff rank but hasn't logged in yet
+            if (account == null) {
+                account = new StaffAccount(player.getUniqueId());
 
-            player.sendMessage(ChatColor.GRAY + "Before you begin as a Staff member type " + ChatColor.AQUA + "/staff login <password>" + ChatColor.GRAY + " to set your 2FA password");
+                manager.getStaffRepository().add(account);
+                manager.getHandler().saveAccount(player, account);
 
-            return;
-        }
+                player.sendMessage(ChatColor.GRAY + "Before you begin as a Staff member type " + ChatColor.AQUA + "/staff login <password>" + ChatColor.GRAY + " to set your 2FA password");
 
-        if (account.isEnabled(StaffAccount.StaffSetting.JOIN_VANISHED)) {
-            manager.getPlugin().getVanishManager().getHandler().hidePlayer(player);
+                return;
+            }
+
+            if (account.isEnabled(StaffAccount.StaffSetting.JOIN_VANISHED)) {
+                manager.getPlugin().getVanishManager().getHandler().hidePlayer(player);
+            }
         }
     }
 
@@ -64,12 +74,19 @@ public final class StaffListener implements Listener {
         final Player player = event.getPlayer();
         final StaffAccount account = manager.getAccountByID(player.getUniqueId());
 
-        if (account == null) {
-            return;
-        }
+        // Send connect notification to staff
+        manager.getAccountByPermission(StaffAccount.StaffSetting.SHOW_CONNECTION_NOTIFICATIONS, true).forEach(staffAccount -> {
+            final Player staff = Bukkit.getPlayer(staffAccount.getUniqueId());
 
-        manager.getHandler().saveAccount(player, account);
-        manager.getStaffRepository().remove(account);
+            if (staff != null && staff.isOnline()) {
+                staff.sendMessage(ChatColor.GRAY + player.getName() + " disconnected " + ChatColor.WHITE + "(" + ChatColor.AQUA + Bukkit.getOnlinePlayers().size() + " online" + ChatColor.WHITE + ")");
+            }
+        });
+
+        if (account != null) {
+            manager.getHandler().saveAccount(player, account);
+            manager.getStaffRepository().remove(account);
+        }
     }
 
     @EventHandler
@@ -106,6 +123,31 @@ public final class StaffListener implements Listener {
             }
 
             player.sendMessage(ChatColor.GRAY + "Please enter your 2FA login with " + ChatColor.AQUA + "/staff login <password>");
+        }
+    }
+
+    @EventHandler (priority = EventPriority.MONITOR)
+    public void onProcessedChat(ProcessedChatEvent event) {
+        final Player player = event.getPlayer();
+        final StaffAccount account = manager.getAccountByID(player.getUniqueId());
+
+        if (account != null) {
+            // Overrides chat ranges to create a broadcasted message
+            if (account.isEnabled(StaffAccount.StaffSetting.ALL_MESSAGES_BROADCAST)) {
+                event.getRecipients().clear();
+                event.getRecipients().addAll(Bukkit.getOnlinePlayers());
+            }
+        }
+
+        // Overrides chat ranges to receive all messages
+        for (StaffAccount onlineStaff : manager.getAccountByPermission(StaffAccount.StaffSetting.SHOW_GLOBAL_CHAT, true)) {
+            final Player onlineStaffPlayer = Bukkit.getPlayer(onlineStaff.getUniqueId());
+
+            if (onlineStaffPlayer == null || !onlineStaffPlayer.isOnline()) {
+                continue;
+            }
+
+            event.getRecipients().add(onlineStaffPlayer);
         }
     }
 }

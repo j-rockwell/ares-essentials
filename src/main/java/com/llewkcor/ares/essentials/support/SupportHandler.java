@@ -1,8 +1,10 @@
 package com.llewkcor.ares.essentials.support;
 
 import com.llewkcor.ares.commons.promise.SimplePromise;
+import com.llewkcor.ares.commons.util.bukkit.Players;
 import com.llewkcor.ares.commons.util.bukkit.Scheduler;
 import com.llewkcor.ares.commons.util.general.Time;
+import com.llewkcor.ares.essentials.staff.data.StaffAccount;
 import com.llewkcor.ares.essentials.support.data.ISupport;
 import com.llewkcor.ares.essentials.support.data.Report;
 import com.llewkcor.ares.essentials.support.data.Request;
@@ -41,9 +43,19 @@ public final class SupportHandler {
         final Report report = new Report(player.getUniqueId(), player.getName(), Time.now(), description, reported.getUniqueId(), reported.getName());
         manager.getTickets().add(report);
 
+        for (StaffAccount onlineStaff : manager.getPlugin().getStaffManager().getAccountByPermission(StaffAccount.StaffSetting.SHOW_TICKET_NOTIFICATIONS, true)) {
+            final Player onlineStaffPlayer = Bukkit.getPlayer(onlineStaff.getUniqueId());
+
+            if (onlineStaffPlayer == null || !onlineStaffPlayer.isOnline()) {
+                continue;
+            }
+
+            onlineStaffPlayer.sendMessage(ChatColor.DARK_RED + "[" + ChatColor.RED + "Report" + ChatColor.DARK_RED + "] " + ChatColor.RED + player.getName() + ChatColor.GRAY + " reported " + ChatColor.RED + reported.getName() + ChatColor.GRAY + " for: " + ChatColor.AQUA + description);
+            Players.playSound(onlineStaffPlayer, Sound.NOTE_PIANO);
+        }
+
         Bukkit.getOnlinePlayers().stream().filter(online -> online.hasPermission("essentials.report.view")).forEach(staff -> {
-            staff.sendMessage(ChatColor.DARK_RED + "[" + ChatColor.RED + "Report" + ChatColor.DARK_RED + "] " + ChatColor.RED + player.getName() + ChatColor.GRAY + " reported " + ChatColor.RED + reported.getName() + ChatColor.GRAY + " for: " + ChatColor.AQUA + description);
-            staff.playSound(staff.getLocation(), Sound.NOTE_PIANO, 1.0F, 1.0F);
+
         });
 
         manager.getTicketCooldowns().add(player.getUniqueId());
@@ -68,10 +80,16 @@ public final class SupportHandler {
         final Request request = new Request(player.getUniqueId(), player.getName(), Time.now(), description);
         manager.getTickets().add(request);
 
-        Bukkit.getOnlinePlayers().stream().filter(online -> online.hasPermission("essentials.request.view")).forEach(staff -> {
-            staff.sendMessage(ChatColor.DARK_AQUA + "[" + ChatColor.AQUA + "Request" + ChatColor.DARK_AQUA + "] " + ChatColor.AQUA + player.getName() + ChatColor.GRAY + " requested: " + ChatColor.YELLOW + description);
-            staff.playSound(staff.getLocation(), Sound.NOTE_PIANO, 1.0F, 1.0F);
-        });
+        for (StaffAccount onlineStaff : manager.getPlugin().getStaffManager().getAccountByPermission(StaffAccount.StaffSetting.SHOW_TICKET_NOTIFICATIONS, true)) {
+            final Player onlineStaffPlayer = Bukkit.getPlayer(onlineStaff.getUniqueId());
+
+            if (onlineStaffPlayer == null || !onlineStaffPlayer.isOnline()) {
+                continue;
+            }
+
+            onlineStaffPlayer.sendMessage(ChatColor.DARK_AQUA + "[" + ChatColor.AQUA + "Request" + ChatColor.DARK_AQUA + "] " + ChatColor.AQUA + player.getName() + ChatColor.GRAY + " requested: " + ChatColor.YELLOW + description);
+            Players.playSound(onlineStaffPlayer, Sound.NOTE_PIANO);
+        }
 
         manager.getTicketCooldowns().add(player.getUniqueId());
 
