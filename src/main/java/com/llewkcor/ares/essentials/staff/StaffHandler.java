@@ -23,10 +23,6 @@ public final class StaffHandler {
         new Scheduler(manager.getPlugin()).sync(() -> StaffDAO.saveAccount(manager.getPlugin().getCore().getDatabaseInstance(), account)).run();
     }
 
-    public void openCombatMenu(Player player, SimplePromise promise) {
-
-    }
-
     /**
      * Handles resetting a players staff account
      * @param username Username
