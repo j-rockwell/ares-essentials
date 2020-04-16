@@ -35,8 +35,13 @@ public final class InventoryMenu extends Menu {
         clear();
 
         if (observed.isDead() || !observed.isOnline()) {
+            updateTask.cancel();
+            this.updateTask = null;
+            this.updateScheduler = null;
+
             player.closeInventory();
             player.sendMessage(ChatColor.RED + observed.getName() + " is no longer available");
+
             return;
         }
 
