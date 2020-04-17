@@ -139,6 +139,8 @@ public final class KitHandler {
         Configs.saveConfig(manager.getPlugin(), "kits", config);
 
         Logger.print("Saved " + kitName + " to kits.yml");
+
+        promise.success();
     }
 
     /**
