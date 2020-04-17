@@ -4,6 +4,7 @@ import com.llewkcor.ares.commons.util.bukkit.Players;
 import com.llewkcor.ares.essentials.Essentials;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -25,10 +26,14 @@ public final class Kit {
         player.getInventory().clear();
         player.getInventory().setArmorContents(null);
 
-        // Load items
-        ItemStack[] itemContents = new ItemStack[contents.size()];
-        itemContents = contents.toArray(itemContents);
-        player.getInventory().setContents(itemContents);
+        int contentCursor = 0;
+        for (ItemStack item : contents) {
+            if (item != null && !item.getType().equals(Material.AIR)) {
+                player.getInventory().setItem(contentCursor, item);
+            }
+
+            contentCursor += 1;
+        }
 
         // Load armor
         ItemStack[] armorContents = new ItemStack[armor.size()];
