@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 public final class MessageCommand extends BaseCommand {
     @Getter public final Essentials plugin;
 
-    @CommandAlias("message|msg")
+    @CommandAlias("message|msg|tell")
     @Description("Send a player a private message")
     @Syntax("<username> <message>")
     public void onMessage(Player player, String username, String message) {
