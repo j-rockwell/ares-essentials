@@ -3,7 +3,9 @@ package com.llewkcor.ares.essentials.kits;
 import com.google.common.collect.Sets;
 import com.llewkcor.ares.essentials.Essentials;
 import com.llewkcor.ares.essentials.kits.data.Kit;
+import com.llewkcor.ares.essentials.kits.listener.KitSignListener;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 
 import java.util.Set;
 
@@ -16,6 +18,8 @@ public final class KitManager {
         this.plugin = plugin;
         this.handler = new KitHandler(this);
         this.kitRepository = Sets.newConcurrentHashSet();
+
+        Bukkit.getPluginManager().registerEvents(new KitSignListener(this), plugin);
     }
 
     /**
