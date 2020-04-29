@@ -1,0 +1,12 @@
+database_uri: 'mongodb://localhost'
+server_restart:
+  default_reboot_time: 300
+  server_lifespan: 43200
+vote:
+  links:
+    - 'https://topg.org/Minecraft/in-600860'
+    - 'https://minecraft-mp.com/server/251982/vote/'
+    - 'https://minecraft-server-list.com/server/456910/vote/'
+  issue_commands:
+    - 'broadcast Thank you {player} for voting for us on {service}! {player} received a Vote Crate! Type /vote to start voting.'
+    - 'reward give {player} crate vote 1'

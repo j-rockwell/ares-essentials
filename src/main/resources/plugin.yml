@@ -1,5 +1,0 @@
-name: ares-essentials
-main: com.llewkcor.ares.essentials.Essentials
-version: 1.0.0
-author: John Rockwell
-depends: [ProtocolLib, NuVotifier, ares-core]
