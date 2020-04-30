@@ -47,7 +47,7 @@ public final class StaffManager {
      * @return Immutable Set of Staff Accounts
      */
     public ImmutableSet<StaffAccount> getAccountByPermission(StaffAccount.StaffSetting setting, boolean value) {
-        return ImmutableSet.copyOf(staffRepository.stream().filter(staff -> staff.getSettings().getSettings().getOrDefault(setting, setting.defaultSetting) == value).collect(Collectors.toSet()));
+        return ImmutableSet.copyOf(staffRepository.stream().filter(staff -> staff.getSettings().getSettings().getOrDefault(setting, setting.defaultSetting) == value && staff.isVerified()).collect(Collectors.toSet()));
     }
 
     /**
