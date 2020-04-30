@@ -31,7 +31,7 @@ public final class BroadcastManager {
 
         this.essentials = essentials;
         this.interval = config.getInt("settings.interval");
-        this.prefix = ChatColor.translateAlternateColorCodes('&', config.getString("settings.prefix"));
+        this.prefix = (config.get("settings.prefix") != null) ? ChatColor.translateAlternateColorCodes('&', config.getString("settings.prefix")) : "Tip: ";
         this.messages = Lists.newArrayList();
         this.queue = Queues.newConcurrentLinkedQueue();
 
@@ -70,6 +70,9 @@ public final class BroadcastManager {
      */
     private String pullMessage() {
         if (queue.isEmpty()) {
+            if (messages.isEmpty()) {
+
+            }
             queue.addAll(messages);
         }
 
