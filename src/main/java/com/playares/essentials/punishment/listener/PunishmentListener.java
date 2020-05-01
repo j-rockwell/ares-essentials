@@ -36,7 +36,7 @@ public final class PunishmentListener implements Listener {
             final Player staff = Bukkit.getPlayer(staffAccount.getUniqueId());
 
             if (staffAccount.isVerified()) {
-                staff.sendMessage(ChatColor.GRAY + "[" + ChatColor.GOLD + "Alt" + ChatColor.GRAY + "] " + ChatColor.RED + player.getName() + ChatColor.GRAY + " has " + ChatColor.BLUE + event.getSessions() + ChatColor.GRAY + " sessions tied to their account");
+                staff.sendMessage(ChatColor.GRAY + "[" + ChatColor.GOLD + "Alt" + ChatColor.GRAY + "] " + ChatColor.RED + player.getName() + ChatColor.GRAY + " has " + ChatColor.BLUE + event.getSessions().size() + ChatColor.GRAY + " sessions tied to their account");
                 staff.sendMessage(ChatColor.GRAY + "Type " + ChatColor.RED + "/lookup " + player.getName() + ChatColor.GRAY + " to further investigate");
             }
         });
