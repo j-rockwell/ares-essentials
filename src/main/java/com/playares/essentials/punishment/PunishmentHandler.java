@@ -3,10 +3,14 @@ package com.playares.essentials.punishment;
 import com.playares.commons.logger.Logger;
 import com.playares.commons.promise.SimplePromise;
 import com.playares.commons.services.account.AccountService;
+import com.playares.commons.services.alts.AltWatcherService;
+import com.playares.commons.services.alts.data.AccountSession;
+import com.playares.commons.services.alts.data.AccountSessionDAO;
 import com.playares.commons.util.bukkit.Scheduler;
 import com.playares.commons.util.general.Time;
 import com.playares.essentials.punishment.data.Punishment;
 import com.playares.essentials.punishment.data.PunishmentType;
+import com.playares.essentials.punishment.menu.LookupMenu;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -357,6 +361,49 @@ public final class PunishmentHandler {
                     staff.sendMessage(ChatColor.LIGHT_PURPLE + sender.getName() + " blacklisted " + aresAccount.getUsername()));
 
             promise.success();
+        });
+    }
+
+    /**
+     * Handles performing an account lookup for a player
+     * @param player Viewer
+     * @param username Viewed Username
+     * @param promise Promise
+     */
+    public void lookup(Player player, String username, SimplePromise promise) {
+        final AccountService accountService = (AccountService)manager.getEssentials().getOwner().getService(AccountService.class);
+        final AltWatcherService altWatcherService = (AltWatcherService)manager.getEssentials().getOwner().getService(AltWatcherService.class);
+
+        if (accountService == null) {
+            promise.fail("Account service not found");
+            return;
+        }
+
+        if (altWatcherService == null) {
+            promise.fail("Alt lookup service not found");
+            return;
+        }
+
+        accountService.getAccountByUsername(username, aresAccount -> {
+            if (aresAccount == null) {
+                player.sendMessage(ChatColor.RED + "Player not found");
+                return;
+            }
+
+            new Scheduler(manager.getEssentials().getOwner()).async(() -> {
+
+                final Collection<Punishment> punishments = manager.getActivePunishments(aresAccount.getUniqueId(), aresAccount.getAddress());
+                final Collection<AccountSession> alts = AccountSessionDAO.getSessions(altWatcherService, aresAccount.getBukkitId(), aresAccount.getAddress());
+
+                new Scheduler(manager.getEssentials().getOwner()).sync(() -> {
+
+                    final LookupMenu menu = new LookupMenu(manager.getEssentials().getOwner(), player, aresAccount, punishments, alts);
+                    menu.open();
+                    promise.success();
+
+                }).run();
+
+            }).run();
         });
     }
 }

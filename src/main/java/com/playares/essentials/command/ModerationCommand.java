@@ -3,6 +3,7 @@ package com.playares.essentials.command;
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
+import com.playares.commons.promise.SimplePromise;
 import com.playares.essentials.EssentialsService;
 import com.playares.essentials.menu.InventoryMenu;
 import lombok.AllArgsConstructor;
@@ -15,6 +16,22 @@ import org.bukkit.entity.Player;
 @AllArgsConstructor
 public final class ModerationCommand extends BaseCommand {
     @Getter public final EssentialsService essentials;
+
+    @CommandAlias("lookup")
+    @CommandPermission("essentials.lookup")
+    @Syntax("<username>")
+    @Description("View a player's information")
+    public void onLookup(Player player, String username) {
+        essentials.getPunishmentManager().getHandler().lookup(player, username, new SimplePromise() {
+            @Override
+            public void success() {}
+
+            @Override
+            public void fail(String s) {
+                player.sendMessage(ChatColor.RED + s);
+            }
+        });
+    }
 
     @CommandAlias("invsee|inventory|inv")
     @CommandPermission("essentials.invsee")
