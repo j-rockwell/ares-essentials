@@ -52,7 +52,7 @@ public final class WarpScrollListener implements Listener {
         }
 
         event.setCancelled(true);
-        player.getInventory().setItemInHand(null);
+        player.getInventory().remove(hand);
 
         final String warpName = lore.get(0);
         final Warp warp = manager.getWarp(warpName);
