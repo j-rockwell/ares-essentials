@@ -73,6 +73,23 @@ public final class KitCommand extends BaseCommand {
         });
     }
 
+    @Subcommand("scroll")
+    @CommandPermission("essentials.kit")
+    @Description("Give yourself a kit scroll")
+    public void onScroll(Player player, String kitName) {
+        plugin.getKitManager().getHandler().giveScroll(player, kitName, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "You have been given a Kit Scroll");
+            }
+
+            @Override
+            public void fail(String s) {
+                player.sendMessage(ChatColor.RED + s);
+            }
+        });
+    }
+
     @Subcommand("delete|del")
     @CommandPermission("essentials.kit.edit")
     @Description("Delete a kit")

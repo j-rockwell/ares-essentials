@@ -3,6 +3,7 @@ package com.playares.essentials.warp;
 import com.google.common.collect.Sets;
 import com.playares.essentials.EssentialsService;
 import com.playares.essentials.warp.data.Warp;
+import com.playares.essentials.warp.listener.WarpScrollListener;
 import com.playares.essentials.warp.listener.WarpSignListener;
 import lombok.Getter;
 
@@ -19,6 +20,7 @@ public final class WarpManager {
         this.warps = Sets.newHashSet();
 
         essentials.getOwner().registerListener(new WarpSignListener(this));
+        essentials.getOwner().registerListener(new WarpScrollListener(this));
     }
 
     /**

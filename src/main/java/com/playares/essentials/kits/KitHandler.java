@@ -2,6 +2,7 @@ package com.playares.essentials.kits;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+import com.playares.commons.item.ItemBuilder;
 import com.playares.commons.logger.Logger;
 import com.playares.commons.promise.SimplePromise;
 import com.playares.essentials.EssentialsService;
@@ -10,9 +11,12 @@ import com.playares.commons.util.general.Configs;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -161,5 +165,31 @@ public final class KitHandler {
         Configs.saveConfig(manager.getEssentials().getOwner(), "kits", config);
 
         Logger.print("Deleted " + kit.getName() + " from kits.yml");
+    }
+
+    /**
+     * Handles delivering a Kit Scroll to the provided player
+     * @param player Player
+     * @param kitName Kit Name
+     * @param promise Promise
+     */
+    public void giveScroll(Player player, String kitName, SimplePromise promise) {
+        final Kit kit = manager.getKit(kitName);
+
+        if (kit == null) {
+            promise.fail("Kit not found");
+            return;
+        }
+
+        final ItemStack item = new ItemBuilder()
+                .setMaterial(Material.EMPTY_MAP)
+                .setName(ChatColor.BLUE + "Kit Scroll")
+                .addLore(kit.getName())
+                .addEnchant(Enchantment.DURABILITY, 1)
+                .addFlag(ItemFlag.HIDE_ENCHANTS)
+                .build();
+
+        player.getInventory().addItem(item);
+        promise.success();
     }
 }

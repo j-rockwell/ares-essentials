@@ -75,6 +75,23 @@ public final class WarpCommand extends BaseCommand {
         });
     }
 
+    @Subcommand("scroll")
+    @CommandPermission("essentials.warp")
+    @Description("Give yourself a warp scroll")
+    public void onScroll(Player player, String kitName) {
+        plugin.getWarpManager().getHandler().giveScroll(player, kitName, new SimplePromise() {
+            @Override
+            public void success() {
+                player.sendMessage(ChatColor.GREEN + "You have been given a Kit Scroll");
+            }
+
+            @Override
+            public void fail(String s) {
+                player.sendMessage(ChatColor.RED + s);
+            }
+        });
+    }
+
     @Subcommand("list")
     @Description("List all warps")
     @CommandPermission("essentials.warp")

@@ -3,6 +3,7 @@ package com.playares.essentials.kits;
 import com.google.common.collect.Sets;
 import com.playares.essentials.EssentialsService;
 import com.playares.essentials.kits.data.Kit;
+import com.playares.essentials.kits.listener.KitScrollListener;
 import com.playares.essentials.kits.listener.KitSignListener;
 import lombok.Getter;
 
@@ -18,6 +19,7 @@ public final class KitManager {
         this.handler = new KitHandler(this);
         this.kitRepository = Sets.newConcurrentHashSet();
 
+        essentials.getOwner().registerListener(new KitScrollListener(this));
         essentials.getOwner().registerListener(new KitSignListener(this));
     }
 

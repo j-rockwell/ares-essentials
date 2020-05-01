@@ -2,15 +2,22 @@ package com.playares.essentials.warp;
 
 import com.google.common.base.Joiner;
 import com.google.common.collect.Lists;
+import com.playares.commons.item.ItemBuilder;
 import com.playares.essentials.EssentialsService;
+import com.playares.essentials.kits.data.Kit;
 import com.playares.essentials.warp.data.Warp;
 import com.playares.commons.logger.Logger;
 import com.playares.commons.promise.SimplePromise;
 import com.playares.commons.util.general.Configs;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
 
@@ -117,5 +124,31 @@ public final class WarpHandler {
         manager.getWarps().forEach(warp -> names.add(warp.getName()));
         player.sendMessage(EssentialsService.PRIMARY + "Available Warps (" + EssentialsService.SECONDARY + manager.getWarps().size() + EssentialsService.PRIMARY + ")");
         player.sendMessage(Joiner.on(", ").join(names));
+    }
+
+    /**
+     * Delivers a Warp Scroll to the provided player
+     * @param player Player
+     * @param warpName Warp
+     * @param promise Promise
+     */
+    public void giveScroll(Player player, String warpName, SimplePromise promise) {
+        final Warp warp = manager.getWarp(warpName);
+
+        if (warp == null) {
+            promise.fail("Warp not found");
+            return;
+        }
+
+        final ItemStack item = new ItemBuilder()
+                .setMaterial(Material.EMPTY_MAP)
+                .setName(ChatColor.RED + "Warp Scroll")
+                .addLore(warp.getName())
+                .addEnchant(Enchantment.DURABILITY, 1)
+                .addFlag(ItemFlag.HIDE_ENCHANTS)
+                .build();
+
+        player.getInventory().addItem(item);
+        promise.success();
     }
 }
