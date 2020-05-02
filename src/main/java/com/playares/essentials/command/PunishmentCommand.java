@@ -15,14 +15,6 @@ import org.bukkit.entity.Player;
 public final class PunishmentCommand extends BaseCommand {
     @Getter public final EssentialsService plugin;
 
-    @CommandAlias("lookup")
-    @Description("Lookup a players information")
-    @CommandPermission("essentials.punishment.lookup")
-    @Syntax("<username>")
-    public void onLookup(Player player, String username) {
-
-    }
-
     @CommandAlias("unban")
     @Description("Unban a player")
     @CommandPermission("essentials.punishment.ban")
