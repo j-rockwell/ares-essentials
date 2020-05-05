@@ -140,8 +140,7 @@ public final class PunishmentHandler {
             }
 
             new Scheduler(manager.getEssentials().getOwner()).async(() -> {
-
-                final Collection<Punishment> activeMutes = manager.getActivePunishments(aresAccount.getUniqueId(), aresAccount.getAddress(), PunishmentType.MUTE);
+                final Collection<Punishment> activeMutes = manager.getActivePunishments(aresAccount.getBukkitId(), aresAccount.getAddress(), PunishmentType.MUTE);
 
                 new Scheduler(manager.getEssentials().getOwner()).sync(() -> {
                     if (activeMutes.isEmpty()) {
@@ -157,7 +156,7 @@ public final class PunishmentHandler {
                     Bukkit.getOnlinePlayers().stream().filter(player -> player.hasPermission("essentials.punishment.view")).forEach(staff ->
                             staff.sendMessage(ChatColor.LIGHT_PURPLE + sender.getName() + " unmuted " + aresAccount.getUsername()));
 
-                    Logger.print(sender.getName() + " unmuted " + aresAccount.getUsername() + " (" + aresAccount.getUniqueId().toString() + ")");
+                    Logger.print(sender.getName() + " unmuted " + aresAccount.getUsername() + " (" + aresAccount.getBukkitId().toString() + ")");
                     promise.success();
                 }).run();
 
@@ -179,7 +178,7 @@ public final class PunishmentHandler {
             }
 
             new Scheduler(manager.getEssentials().getOwner()).async(() -> {
-                final Collection<Punishment> activeBans = manager.getActivePunishments(aresAccount.getUniqueId(), aresAccount.getAddress(), PunishmentType.BAN);
+                final Collection<Punishment> activeBans = manager.getActivePunishments(aresAccount.getBukkitId(), aresAccount.getAddress(), PunishmentType.BAN);
 
                 new Scheduler(manager.getEssentials().getOwner()).sync(() -> {
                     if (activeBans.isEmpty()) {
@@ -195,7 +194,7 @@ public final class PunishmentHandler {
                     Bukkit.getOnlinePlayers().stream().filter(player -> player.hasPermission("essentials.punishment.view")).forEach(staff ->
                             staff.sendMessage(ChatColor.LIGHT_PURPLE + sender.getName() + " unbanned " + aresAccount.getUsername()));
 
-                    Logger.print(sender.getName() + " unbanned " + aresAccount.getUsername() + " (" + aresAccount.getUniqueId().toString() + ")");
+                    Logger.print(sender.getName() + " unbanned " + aresAccount.getUsername() + " (" + aresAccount.getBukkitId().toString() + ")");
                     promise.success();
                 }).run();
             }).run();
@@ -217,7 +216,7 @@ public final class PunishmentHandler {
 
             new Scheduler(manager.getEssentials().getOwner()).async(() -> {
 
-                final Collection<Punishment> activeBlacklists = manager.getActivePunishments(aresAccount.getUniqueId(), aresAccount.getAddress(), PunishmentType.BLACKLIST);
+                final Collection<Punishment> activeBlacklists = manager.getActivePunishments(aresAccount.getBukkitId(), aresAccount.getAddress(), PunishmentType.BLACKLIST);
 
                 new Scheduler(manager.getEssentials().getOwner()).sync(() -> {
                     if (activeBlacklists.isEmpty()) {
@@ -233,7 +232,7 @@ public final class PunishmentHandler {
                     Bukkit.getOnlinePlayers().stream().filter(player -> player.hasPermission("essentials.punishment.view")).forEach(staff ->
                             staff.sendMessage(ChatColor.LIGHT_PURPLE + sender.getName() + " unblacklisted " + aresAccount.getUsername()));
 
-                    Logger.print(sender.getName() + " unblacklisted " + aresAccount.getUsername() + " (" + aresAccount.getUniqueId().toString() + ")");
+                    Logger.print(sender.getName() + " unblacklisted " + aresAccount.getUsername() + " (" + aresAccount.getBukkitId().toString() + ")");
                     promise.success();
                 }).run();
 
@@ -390,7 +389,7 @@ public final class PunishmentHandler {
 
             new Scheduler(manager.getEssentials().getOwner()).async(() -> {
 
-                final Collection<Punishment> punishments = manager.getActivePunishments(aresAccount.getUniqueId(), aresAccount.getAddress());
+                final Collection<Punishment> punishments = manager.getActivePunishments(aresAccount.getBukkitId(), aresAccount.getAddress());
                 final Collection<AccountSession> alts = AccountSessionDAO.getSessions(altWatcherService, aresAccount.getBukkitId(), aresAccount.getAddress());
 
                 new Scheduler(manager.getEssentials().getOwner()).sync(() -> {

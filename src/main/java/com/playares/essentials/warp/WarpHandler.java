@@ -29,6 +29,10 @@ public final class WarpHandler {
      * Handles loading all warps from file to memory
      */
     public void load() {
+        if (!manager.getWarps().isEmpty()) {
+            manager.getWarps().clear();
+        }
+
         final YamlConfiguration config = Configs.getConfig(manager.getEssentials().getOwner(), "warps");
 
         if (config.getConfigurationSection("warps") == null) {

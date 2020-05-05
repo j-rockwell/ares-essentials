@@ -1,8 +1,10 @@
 package com.playares.essentials.command;
 
 import co.aikar.commands.BaseCommand;
+import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Description;
+import co.aikar.commands.annotation.HelpCommand;
 import co.aikar.commands.annotation.Syntax;
 import com.playares.commons.logger.Logger;
 import com.playares.essentials.EssentialsService;
@@ -11,6 +13,7 @@ import com.playares.commons.services.account.data.AresAccount;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 @AllArgsConstructor
@@ -77,5 +80,11 @@ public final class IgnoreCommand extends BaseCommand {
 
             Logger.print(player.getName() + " stopped ignoring " + ignoredAccount.getUsername());
         });
+    }
+
+    @HelpCommand
+    public void onHelp(CommandSender sender, CommandHelp help) {
+        help.showHelp();
+        sender.sendMessage(ChatColor.YELLOW + "Type " + ChatColor.GOLD + "/" + help.getCommandName() + " help " + (help.getPage() + 1) + ChatColor.YELLOW + " to see the next page");
     }
 }

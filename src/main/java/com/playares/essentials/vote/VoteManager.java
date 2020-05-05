@@ -22,11 +22,6 @@ public final class VoteManager {
         this.voteLinks = Lists.newArrayList();
         this.voteCommands = Lists.newArrayList();
 
-        final YamlConfiguration config = Configs.getConfig(essentials.getOwner(), "config");
-
-        voteLinks.addAll(config.getStringList("vote.links"));
-        voteCommands.addAll(config.getStringList("vote.issue_commands"));
-
         essentials.getOwner().registerListener(new VotifierListener(this));
     }
 }

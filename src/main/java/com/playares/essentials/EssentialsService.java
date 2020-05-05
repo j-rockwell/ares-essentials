@@ -63,6 +63,7 @@ public final class EssentialsService implements AresService {
 
         // Commands
         owner.registerCommand(new RebootCommand(this));
+        owner.registerCommand(new EssentialsCommand(this));
         owner.registerCommand(new ItemCommand(this));
         owner.registerCommand(new PlayerCommand(this));
         owner.registerCommand(new ChatCommand(this));
@@ -79,8 +80,10 @@ public final class EssentialsService implements AresService {
         owner.registerCommand(new KitCommand(this));
 
         // Load Data
+        voteManager.getHandler().load();
         warpManager.getHandler().load();
         kitManager.getHandler().load();
+        broadcastManager.getHandler().load();
     }
 
     public void stop() {
