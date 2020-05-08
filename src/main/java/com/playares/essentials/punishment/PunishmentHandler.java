@@ -87,7 +87,10 @@ public final class PunishmentHandler {
             final Punishment punishment = new Punishment(PunishmentType.MUTE, aresAccount.getBukkitId(), creatorId, aresAccount.getAddress(), reason);
             final Player muted = Bukkit.getPlayer(aresAccount.getBukkitId());
 
-            muted.sendMessage(manager.getMuteMessage(punishment));
+            if (muted != null && muted.isOnline()) {
+                muted.sendMessage(manager.getMuteMessage(punishment));
+            }
+
             manager.setPunishment(false, punishment);
 
             Bukkit.getOnlinePlayers().stream().filter(player -> player.hasPermission("essentials.punishment.view")).forEach(staff ->
