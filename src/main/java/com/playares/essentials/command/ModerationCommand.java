@@ -21,6 +21,7 @@ public final class ModerationCommand extends BaseCommand {
     @CommandPermission("essentials.lookup")
     @Syntax("<username>")
     @Description("View a player's information")
+    @CommandCompletion("@players")
     public void onLookup(Player player, String username) {
         essentials.getPunishmentManager().getHandler().lookup(player, username, new SimplePromise() {
             @Override
