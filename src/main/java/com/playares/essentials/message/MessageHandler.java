@@ -75,6 +75,7 @@ public final class MessageHandler {
         sender.sendMessage(ChatColor.GRAY + "(To " + receiver.getName() + "): " + ChatColor.RESET + message);
 
         manager.setRecentlyMessaged(sender, receiver);
+        manager.setRecentlyMessaged(receiver, sender);
 
         Logger.print(sender.getName() + " -> " + receiver.getName() + ": " + message);
 
@@ -141,6 +142,7 @@ public final class MessageHandler {
         sender.sendMessage(ChatColor.GRAY + "(To " + receiver.getName() + "): " + ChatColor.RESET + message);
 
         manager.setRecentlyMessaged(sender, receiver);
+        manager.setRecentlyMessaged(receiver, sender);
 
         Logger.print(sender.getName() + " -> " + receiver.getName() + ": " + message);
 
